@@ -3,12 +3,39 @@
 <script >
 var canvas;
 var canvasContext;
+var ballX = 50;
+var ballY = 80 ;
+
 	window.onload = function(){
 		canvas = document.getElementById('gameCanvas');
 		canvasContext = canvas.getContext('2d');
-		canvasContext.fillstyle = 'black';
-		canvasContext.fillRect(0,0,canvas.width,canvas.height);
+		var framesPerSecond = 30;
+		setInterval(	
+			            function(){
+		                moveEverything();
+		                drawEveryThing();
+	                    }, 
+	                    1000/framesPerSecond);
 
+
+	                    }
+
+
+
+	function moveEverything(){
+		ballX = ballX + 5;
+
+	}
+
+	function drawEveryThing(){
+		
+		
+        canvasContext.fillstyle = 'black';
+		canvasContext.fillRect(0,0,canvas.width,canvas.height);
+		canvasContext.fillstyle = 'white';
+		canvasContext.fillRect(0,0,10,100);
+	    canvasContext.fillstyle = 'red';
+		canvasContext.fillRect(ballX,100,10,10);
 	}
 </script>
 
