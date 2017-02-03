@@ -1,20 +1,37 @@
-<doctype! html>
 <html>
-<canvas id = "gameCanvas" width = "800" height = "600"></canvas>
+	<canvas id ="gameCanvas" width="800" height="600"></canvas>
 	<script>
-		var canvas;
-		var canvasContext;
-
+		var canvas, canvasContext, ballX = 50, ballSpeedX=10;
 		window.onload = function(){
-
-			console.log("yo");
 			canvas = document.getElementById('gameCanvas');
 			canvasContext = canvas.getContext('2d');
-			canvasContext.fillStyle = 'black';
-			canvasContext.fillRect = (0,0, canvas.width, canvas.height);
+			var fps = 30;
+            setInterval( function (){
+                           action();
+                          drawStuff();
+		                   }, 
+		                     1000/fps);
+		                 }
 
-	     }
+		function action(){
+			ballX += ballSpeedX;
+			if(ballX > canvas.width){
+				ballSpeedX = - ballSpeedX;
+			}
+			if(ballX < 0){
+				ballSpeedX = - ballSpeedX;
+			}
 		
+		}
+		function drawStuff(){
+			createRect('black',0,0, canvas.width, canvas.height);
+			createRect('red',ballX,100, 10, 10);
+			createRect('white',0, 100, 10, 100);
+
+		}
+		function createRect(fillColor,leftX, topY, width, height){
+			canvasContext.fillStyle = fillColor;
+			canvasContext.fillRect(leftX, topY, width, height)
+		}
 	</script>
-	
 </html>
