@@ -1,7 +1,10 @@
 <html>
 	<canvas id ="gameCanvas" width="800" height="600"></canvas>
 	<script>
-		var canvas, canvasContext, ballX = 50, ballSpeedX=10;
+		var canvas, canvasContext, ballX = 50, ballY =50, ballSpeedX = 10, ballSpeedY = 4, paddle1Y = 250, paddle2Y = 250;
+		const paddelHeight = 100;
+
+
 		window.onload = function(){
 			canvas = document.getElementById('gameCanvas');
 			canvasContext = canvas.getContext('2d');
@@ -11,24 +14,77 @@
                           drawStuff();
 		                   }, 
 		                     1000/fps);
+ 
+                canvas.addEventListener('mousemove', 
+                	                      function(evt){
+             	                          var mousePos = calculateMousePos(evt);
+            	                              paddle1Y = mousePos.y -(paddelHeight/2);
+                                        });
 		                 }
+
+		                 function calculateMousePos(evt){
+		                 	var rect = canvas.getBoundingClientRect();
+		                 	var root = document.documentElement;
+		                 	var mouseX = evt.clientX - rect.left - root.scrollLeft;
+		                 	var mouseY = evt.clientY - rect.top - root.scrollTop;
+		                 	return{
+		                 		x:mouseX,
+		                 		y:mouseY
+		                 	}
+
+		                 }
+		                  function ballReset(){
+				           ballSpeedX = - ballSpeedX;
+
+		                  	ballX = canvas.width/2;
+		                  	ballY = canvas.height/2;
+		                  }
 
 		function action(){
 			ballX += ballSpeedX;
+			ballY += ballSpeedY;
+
 			if(ballX > canvas.width){
 				ballSpeedX = - ballSpeedX;
 			}
-			if(ballX < 0){
-				ballSpeedX = - ballSpeedX;
+
+			if(ballX < 0)
+			{
+				if (ballY > paddle1Y && 
+					ballY < paddle1Y+paddelHeight)
+				{
+					ballSpeedX = -ballSpeedX;
+				}
+				  else{
+				   ballReset();
+			          }
+			 }
+
+			if (ballY > canvas.height){
+				ballSpeedY = -ballSpeedY;
+			}
+			if (ballY < 0){
+				ballSpeedY = -ballSpeedY;
 			}
 		
 		}
 		function drawStuff(){
 			createRect('black',0,0, canvas.width, canvas.height);
-			createRect('red',ballX,100, 10, 10);
-			createRect('white',0, 100, 10, 100);
+			createRect('white',0, paddle1Y, 10, paddelHeight);
+			createRect('white', canvas.width-10, paddle2Y, 10, paddelHeight);
+
+			makeCircle('white',ballX,ballY,10);
+
+			
 
 		}
+		 function makeCircle( fillColor,centerX, centerY, radius){
+		 	canvasContext.fillStyle = fillColor;
+			canvasContext.beginPath();
+			canvasContext.arc(centerX, centerY, radius, 0, Math.PI*2, true);
+			canvasContext.fill();
+
+		 }
 		function createRect(fillColor,leftX, topY, width, height){
 			canvasContext.fillStyle = fillColor;
 			canvasContext.fillRect(leftX, topY, width, height)
