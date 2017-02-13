@@ -46,6 +46,7 @@
 
 			if(ballX > canvas.width){
 				ballSpeedX = - ballSpeedX;
+				ballReset();
 			}
 
 			if(ballX < 0)
@@ -89,5 +90,6 @@
 			canvasContext.fillStyle = fillColor;
 			canvasContext.fillRect(leftX, topY, width, height)
 		}
+
 	</script>
 </html>
